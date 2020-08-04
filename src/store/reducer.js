@@ -5,7 +5,8 @@ const INITIAL={
     From: "",
     Destination:"",
     TotalPrice:0,
-    AllOrders:[]
+    AllOrders:[],
+    Names:[]
 }
 
 const reducer=(state=INITIAL,action)=>{
@@ -43,8 +44,14 @@ const reducer=(state=INITIAL,action)=>{
         case "store":
             const update=state.AllOrders.concat([[state.From,state.Destination,state.TotalPrice]])
             return{
-                ...INITIAL,
+                ...state,
                 AllOrders:update
+            }
+        case "name":
+            const update1=state.Names.concat([action.val])
+            return{
+                ...state,
+                Names:update1
             }
     }
     return state

@@ -6,18 +6,17 @@ import classes from './FlightDetails.module.css'
 function FlightDetails(props) {
     return (
         <div>
-            //<h1>{props.number}</h1>
-            <div className={classes.IND}>
+            <div className={classes.ticket}>
                 <h1>INDIGO</h1>
                 <h1>Price: {1000*props.number}</h1>
                 <h1 onClick={()=>props.Evaluate(1000*props.number)}><Link to="/summary">SELECT</Link></h1>
             </div>
-            <div className={classes.VIS}>
+            <div className={classes.ticket} style={{background:"purple"}}>
                 <h1>VISTARA</h1>
                 <h1>Price: {2000*props.number}</h1>
                 <h1 onClick={()=>props.Evaluate(2000*props.number)}><Link to="/summary">SELECT</Link></h1>
             </div>
-            <div className={classes.SPJ}>
+            <div className={classes.ticket} style={{background:"red"}}>
                 <h1>SPICEJET</h1>
                 <h1>Price: {3000*props.number}</h1>
                 <h1 onClick={()=>props.Evaluate(3000*props.number)}><Link to="/summary">SELECT</Link></h1>

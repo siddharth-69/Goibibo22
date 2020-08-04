@@ -11,6 +11,8 @@ import * as serviceWorker from './serviceWorker';
 import Second from './components/Second';
 import Orders from './components/Orders';
 import Summary from './components/Summary';
+import ContactDetails from './components/ContactDetails';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const store=createStore(reducer)
 
@@ -18,10 +20,16 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <Route path="/" exact component={App} />
-        <Route path="/orders" exact component={Second} />
-        <Route path="/finals" exact component={Orders} />
-        <Route path="/summary" exact component={Summary} />
+          <div className="App">
+            <Route path="/" exact component={App} />
+            <ErrorBoundary>
+              <Route path="/orders" exact component={Second} />
+              <Route path="/finals" exact component={Orders} />
+              <Route path="/summary" exact component={Summary} />
+              <Route path="/forms" exact component={ContactDetails} />
+            </ ErrorBoundary>
+          </div>
+        x
       </BrowserRouter>
     </Provider>
   </React.StrictMode>,

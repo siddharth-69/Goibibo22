@@ -1,21 +1,15 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
-import DatePicker from "react-datepicker";
+import "../App.css"
+import cities from './cities'
+import classes from './Homepage.module.css'
+import DatePicker from 'react-datepicker';
 import {Route,Link} from 'react-router-dom'
-import "react-datepicker/dist/react-datepicker.css";
+import {TextField} from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
+import 'react-datepicker/dist/react-datepicker.css';
 
 export class Homepage extends Component {
-    constructor(props) {
-        super(props);
-    
-        this.state = {
-            activeSuggestion: 0,
-            filteredSuggestions: [],
-            showSuggestions: false,
-            userInput:""
-        };
-    }
-
     handleChangeS=(date)=>{
         this.props.onSdateChange(date)
     }
@@ -28,162 +22,52 @@ export class Homepage extends Component {
         this.props.onNumberChange(e.currentTarget.value)
     }
 
-    onChangeF = e => {
-    const { options } = this.props;
-    const userInput = e.currentTarget.value;
-
-    const filteredSuggestions = options.filter(
-        suggestion =>
-        suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-    );
-    
-    this.props.onFromChange(userInput)
-    this.setState({
-        activeSuggestion: 0,
-        filteredSuggestions,
-        showSuggestions: true,
-        userInput:userInput
-    });
-    };
-
-    onChangeT = e => {
-    const { options } = this.props;
-    const userInput = e.currentTarget.value;
-
-    const filteredSuggestions = options.filter(
-        suggestion =>
-        suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-    );
-    
-    this.props.onToChange(userInput)
-    this.setState({
-        activeSuggestion: 0,
-        filteredSuggestions,
-        showSuggestions: true,
-        userInput:userInput
-    });
-    };
-
-    onClick = e => {
-    this.setState({
-        activeSuggestion: 0,
-        filteredSuggestions: [],
-        showSuggestions: false,
-        userInput: e.currentTarget.innerText
-    });
-    };
-
-    onKeyDown = e => {
-    const { activeSuggestion, filteredSuggestions } = this.state;
-    if (e.keyCode === 13) {
-        this.setState({
-        activeSuggestion: 0,
-        showSuggestions: false,
-        userInput: filteredSuggestions[activeSuggestion]
-        });
+    onChangeF = (e,val) => {
+        this.props.onFromChange(val)
     }
-    else if (e.keyCode === 38) {
-        if (activeSuggestion === 0) {
-        return;
-        }
 
-        this.setState({ activeSuggestion: activeSuggestion - 1 });
+    onChangeT = (e,val) => {
+        this.props.onToChange(val)
     }
-    else if (e.keyCode === 40) {
-        if (activeSuggestion - 1 === filteredSuggestions.length) {
-        return;
-        }
-
-        this.setState({ activeSuggestion: activeSuggestion + 1 });
-    }
-    };
-
 
     render() {
-    const {
-        onClick,
-        onKeyDown,
-        state: {
-        activeSuggestion,
-        filteredSuggestions,
-        showSuggestions,
-        userInput
-        }
-    } = this;
-
-    let suggestionsListComponent;
-
-    if (showSuggestions && userInput) {
-        if (filteredSuggestions.length) {
-        suggestionsListComponent = (
-            <ul class="suggestions">
-            {filteredSuggestions.map((suggestion, index) => {
-                let className;
-
-                // Flag the active suggestion with a class
-                if (index === activeSuggestion) {
-                className = "suggestion-active";
-                }
-
-                return (
-                <li
-                    className={className}
-                    key={suggestion}
-                    onClick={onClick}
-                >
-                    {suggestion}
-                </li>
-                );
-            })}
-            </ul>
-        );
-        } else {
-        suggestionsListComponent = (
-            <div>
-                <em>No suggestions, you're on your own!</em>
+        console.log(this.props.From)
+        return (
+            <div className={classes.Homepage} style={{opacity:0.8}}>
+                <h4>From</h4>
+                <Autocomplete
+                options={cities}
+                onChange={this.onChangeF}
+                getOptionLabel={(option) => option}
+                renderInput={(params) => <TextField {...params} label="Travelling From..." variant="outlined" 
+                />}
+                />
+                <h4>To</h4>
+                <Autocomplete
+                options={cities}
+                onChange={this.onChangeT}
+                getOptionLabel={(option) => option}
+                renderInput={(params) => <TextField {...params} label="Travelling To..." variant="outlined"
+                />}
+                />
+                <h4>Date of Departure: {' '}<DatePicker
+                selected={this.props.startDate}
+                onChange={this.handleChangeS} /></h4>
+                <h4>Date of Return:{' '}<DatePicker
+                selected={this.props.endDate}
+                onChange={this.handleChangeE} />
+                </h4>
+                <h4>Number of People: <input type="text" onChange={this.handleChangeN}/></h4>
+                
+                <Link to="/orders">
+                    <button className={classes.OrderButton}>CONTINUE</button>
+                </Link>
             </div>
         );
-        }
-    }
-
-    return (
-        <div>
-            <h2>From</h2>
-            <input
-            type="text"
-            onChange={this.onChangeF}
-            onKeyDown={onKeyDown}
-            value={this.props.From}
-            />
-            {suggestionsListComponent}
-            <h2>To</h2>
-            <input
-            type="text" 
-            onChange={this.onChangeT}
-            onKeyDown={onKeyDown}
-            value={this.props.Destination}
-            />
-            {suggestionsListComponent}
-            <h2>Date of Departure</h2>
-            <DatePicker
-            selected={this.props.startDate}
-            onChange={this.handleChangeS} />
-            <h2>Date of Return</h2>
-            <DatePicker
-            selected={this.props.endDate}
-            onChange={this.handleChangeE} />
-            <h2>Number of People</h2>
-            <input type="number" onChange={this.handleChangeN}/><br /><br />
-            <Link to="/orders">
-                <button>CONTINUE</button>
-            </Link>            
-        </div>
-    );
     }
 }
 
 const mapStateToProps=(state)=>{
-    console.log(state)
     return{
         startDate: state.startDate,
         number_of_people: state.number_of_people,

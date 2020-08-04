@@ -1,0 +1,24 @@
+.OrderButton {
+    background-color: blue;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #966909;
+    color: red;
+    font-family: inherit;
+    font-size: 1.2em;
+    padding: 15px 30px;
+    box-shadow: 2px 2px 2px #966909;
+}
+
+.OrderButton:hover, .OrderButton:active {
+    background-color: silver;
+    border: 1px solid #966909;
+    color: #966909;
+}
+
+@media (min-width: 500px) and (min-height: 400px) {
+    .Homepage{
+        width: 350px;
+        height: 300px;
+    }
+}
